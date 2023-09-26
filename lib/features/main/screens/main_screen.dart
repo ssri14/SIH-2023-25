@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:untitled/features/main/screens/map_screen.dart';
 
 class MainScreen extends StatelessWidget {
   MainScreen({super.key});
@@ -14,8 +15,6 @@ class MainScreen extends StatelessWidget {
 
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-
-
 
   static const CameraPosition _kLake = CameraPosition(
       bearing: 192.8334901395799,
@@ -49,15 +48,7 @@ class MainScreen extends StatelessWidget {
           text: "maps",
         ),
       ]),
-      body: SafeArea(
-        child: GoogleMap(
-          mapType: MapType.normal,
-          initialCameraPosition: _kGooglePlex,
-          onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
-          },
-        ),
-      ),
+      body: SafeArea(child: MapScreen()),
     );
   }
 
