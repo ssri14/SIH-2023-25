@@ -11,13 +11,14 @@ class MapScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final MapController map = Get.put(MapController());
     final LocationController loc = Get.put(LocationController());
-    return GoogleMap(
-      mapType: MapType.normal,
-      initialCameraPosition: const CameraPosition(target: LatLng(0.00, 0.00)),
-      onMapCreated: (GoogleMapController controller) {
-        loc.controller.value.complete(controller);
-      },
-      markers: {loc.myMarker.value},
-    );
+    return Obx(() => GoogleMap(
+          mapType: MapType.normal,
+          initialCameraPosition:
+              const CameraPosition(target: LatLng(0.00, 0.00)),
+          onMapCreated: (GoogleMapController controller) {
+            loc.controller.value.complete(controller);
+          },
+          markers: {loc.myMarker.value},
+        ));
   }
 }
