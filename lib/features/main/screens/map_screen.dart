@@ -21,9 +21,16 @@ class MapScreen extends StatelessWidget {
       children: [
         Obx(() {
           final st = <Marker>{};
-          for (var it in loc.dummyService) {
-            if (map.selected.contains(it.name)) {
+
+          if (map.selected.isEmpty) {
+            for (var it in loc.dummyService) {
               st.add(loc.createMarker(LatLng(it.lat, it.lng), it.name));
+            }
+          } else {
+            for (var it in loc.dummyService) {
+              if (map.selected.contains(it.name)) {
+                st.add(loc.createMarker(LatLng(it.lat, it.lng), it.name));
+              }
             }
           }
 
@@ -32,8 +39,7 @@ class MapScreen extends StatelessWidget {
           return GoogleMap(
             mapType: MapType.normal,
             zoomControlsEnabled: false,
-            initialCameraPosition:
-                const CameraPosition(target: LatLng(0.00, 0.00)),
+            initialCameraPosition: camera(map),
             onMapCreated: (GoogleMapController controller) {
               loc.controller.value.complete(controller);
             },
@@ -49,13 +55,11 @@ class MapScreen extends StatelessWidget {
               const SizedBox(
                 width: 3,
               ),
-              buildFilterChip(
-                  "2", Icons.medical_services_outlined, 1, map),
+              buildFilterChip("2", Icons.medical_services_outlined, 1, map),
               const SizedBox(
                 width: 3,
               ),
-              buildFilterChip(
-                  "3", Icons.fire_extinguisher_outlined, 2, map),
+              buildFilterChip("3", Icons.fire_extinguisher_outlined, 2, map),
             ],
           ),
         ),
@@ -86,7 +90,12 @@ class MapScreen extends StatelessWidget {
         ));
   }
 
-  LatLng fromLocation(LocationData data){
-    return LatLng(data.latitude! , data.longitude!);
+  LatLng fromLocation(LocationData data) {
+    return LatLng(data.latitude!, data.longitude!);
+  }
+
+  camera(MapController map) {
+    if (map.camera.value != null) return map.camera.value;
+    return const CameraPosition(target: LatLng(0.00, 0.00));
   }
 }

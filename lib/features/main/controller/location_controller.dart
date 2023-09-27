@@ -11,6 +11,7 @@ class LocationController extends GetxController {
   final _locationService = LocationService();
   Rx<bool> serviceEnabled = false.obs;
   Rx<bool> permission = false.obs;
+  Rxn<CameraPosition> camera = Rxn();
   Rxn<LocationData> location = Rxn();
   StreamSubscription<LocationData>? _locationSub;
   Rx<Marker> myMarker =
@@ -19,9 +20,9 @@ class LocationController extends GetxController {
   RxList<Marker> services = <Marker>[].obs;
 
   final dummyService = [
-    RescueService(name: "1", id : "1234" , phoneNo: "222" ,lat: 23.2 ,lng: 86.44),
-    RescueService(name: "2", id : "1234" , phoneNo: "222" ,lat: 23.4 ,lng: 86.41),
-    RescueService(name: "3", id : "1234" , phoneNo: "222" ,lat: 23.4 ,lng: 86.49),
+    RescueService(name: "1", id: "1234", phoneNo: "222", lat: 23.2, lng: 86.44),
+    RescueService(name: "2", id: "1234", phoneNo: "222", lat: 23.4, lng: 86.41),
+    RescueService(name: "3", id: "1234", phoneNo: "222", lat: 23.4, lng: 86.49),
   ];
 
   Rx<Completer<GoogleMapController>> controller =
@@ -50,8 +51,8 @@ class LocationController extends GetxController {
         startListeningLocation(
           (p0) {
             myMarker.value = createMarker(p0, 'me');
+            camera.value = createCamera(p0);
             goToLocation(createCamera(p0));
-
           },
         );
       }
@@ -82,7 +83,7 @@ class LocationController extends GetxController {
       bearing: 0.0,
       target: LatLng(loc.latitude, loc.longitude),
       tilt: 0.005,
-      zoom: 6);
+      zoom: 16);
 
   @override
   void onClose() {

@@ -45,15 +45,15 @@ class MainScreen extends StatelessWidget {
             tabs: const [
               GButton(
                 icon: Icons.home_outlined,
-                text: "home",
+                text: "",
               ),
               GButton(
-                icon: Icons.home_outlined,
-                text: "sos",
+                icon: Icons.search_outlined,
+                text: "",
               ),
               GButton(
-                icon: Icons.home_outlined,
-                text: "maps",
+                icon: Icons.messenger_outline,
+                text: "",
               ),
             ]),
         body: PageView(
