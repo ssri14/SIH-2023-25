@@ -97,6 +97,7 @@ class ChipController extends GetxController {
       "type": "Ambulance/Fire/Police"
     }
   ].obs;
+
   void updatefilterlist(){
     filterData.clear();
     for(int i = 0;i<dummyData.length;i++){

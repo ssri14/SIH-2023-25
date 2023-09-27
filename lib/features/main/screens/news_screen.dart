@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -19,7 +17,6 @@ class _NewsScreenState extends State<NewsScreen> {
   final ChipController chipController = Get.put(ChipController());
   bool _showClearButton = false;
   List<String> listData = List.generate(10, (index) => 'Item ${index + 1}');
-
 
   @override
   Widget build(BuildContext context) {
@@ -95,13 +92,12 @@ class _NewsScreenState extends State<NewsScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child:Wrap(
+                      child: Wrap(
                         spacing: 20,
                         children: List<Widget>.generate(filterChoices.length,
-                                (int index) {
-                              final filter = filterChoices[index];
-                              return Obx(() => ChoiceChip(
-
+                            (int index) {
+                          final filter = filterChoices[index];
+                          return Obx(() => ChoiceChip(
                                 selectedColor: Colors.blue,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20)),
@@ -116,33 +112,39 @@ class _NewsScreenState extends State<NewsScreen> {
                                 selectedShadowColor: Colors.blue,
 
                                 onSelected: (bool selected) {
-
-                                  if(index==0){
-                                    if(selected){
-                                      chipController.boolList.value = [true,true,true,true];
+                                  if (index == 0) {
+                                    if (selected) {
+                                      chipController.boolList.value = [
+                                        true,
+                                        true,
+                                        true,
+                                        true
+                                      ];
+                                    } else {
+                                      chipController.boolList.value = [
+                                        false,
+                                        false,
+                                        false,
+                                        false
+                                      ];
                                     }
-                                    else{
-                                      chipController.boolList.value = [false,false,false,false];
-                                    }
-                                    }
-
+                                  }
 
                                   chipController.boolList[index] = selected;
                                   final category = filter['category'];
                                   if (selected) {
-
-
                                     chipController.addToList(category);
-                                    debugPrint('final list ${chipController.finalType.value}');
+                                    debugPrint(
+                                        'final list ${chipController.finalType.value}');
                                   } else {
                                     chipController.removeFromList(category);
-                                    debugPrint('final list ${chipController.finalType.value}');
+                                    debugPrint(
+                                        'final list ${chipController.finalType.value}');
                                   }
                                   chipController.updatefilterlist();
-
                                 },
                               ));
-                            }),
+                        }),
                       ),
                     ),
                   ],
@@ -150,7 +152,8 @@ class _NewsScreenState extends State<NewsScreen> {
               ),
             ),
             Expanded(
-              child: Obx(() => ListView.builder(
+                child: Obx(
+              () => ListView.builder(
                 itemCount: chipController.filterData.value.length,
                 itemBuilder: (BuildContext context, int index) {
                   final calamity = chipController.filterData.value[index];
@@ -196,8 +199,8 @@ class _NewsScreenState extends State<NewsScreen> {
                     ),
                   );
                 },
-              ),)
-            ),
+              ),
+            )),
           ],
         ),
       ),
