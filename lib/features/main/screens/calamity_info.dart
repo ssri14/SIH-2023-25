@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:untitled/data/network/api/ChatApi.dart';
 import 'package:untitled/features/main/controller/calamity_controller.dart';
 import 'package:untitled/res/ProjectImages.dart';
 
@@ -14,6 +15,7 @@ class CalamityInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  myController.fetchNewsData();
     return Scaffold(
       body: SafeArea(
           child: Container(
@@ -94,7 +96,7 @@ class CalamityInfo extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(),
-                child: create(),
+                child: Obx(() =>create() ),
               ),
             ),
             Container(
@@ -124,7 +126,9 @@ class CalamityInfo extends StatelessWidget {
                         children: [
                           Expanded(
                             child: TextField(
+
                               decoration: const InputDecoration(
+
                                 hintText: 'Type a message...',
                                 border: InputBorder.none, // Remove border
                               ),
@@ -133,10 +137,7 @@ class CalamityInfo extends StatelessWidget {
                               },
                             ),
                           ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.send_outlined),
-                          ),
+                          Obx(() => Button())
                         ],
                       ),
                     ),
@@ -149,13 +150,27 @@ class CalamityInfo extends StatelessWidget {
       )),
     );
   }
-
+Widget Button(){
+    if(myController.chat.isEmpty){
+      return SizedBox(
+        height: 0,
+        width: 0,
+      );
+    }
+    else{
+      return IconButton(onPressed: (){
+           myController.postnewsdata();
+      }, icon: Icon(Icons.send));
+    }
+}
   Widget create() {
     if (!myController.isloading.value) {
       return ListView.builder(
-          itemCount: 5,
+          itemCount: myController.chatting.length,
           itemBuilder: (BuildContext context, int index) {
-            return createContainer("Kaushan", "Ambulance bhejo");
+            String input = myController.chatting[index];
+            List<String> output = input.split(RegExp(r"[%|]"));
+            return createContainer(output[1], output[0]);
           });
     } else {
       return Shimmer.fromColors(
