@@ -1,67 +1,73 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:untitled/features/main/controller/main_controller.dart';
 import 'package:untitled/features/main/screens/calamity_info.dart';
 import 'package:untitled/features/main/screens/map_screen.dart';
 import 'package:untitled/features/main/screens/news_screen.dart';
 
 class MainScreen extends StatelessWidget {
-  MainScreen({super.key});
-
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-
-  final Completer<GoogleMapController> _controller =
-      Completer<GoogleMapController>();
-
-  static const CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(23.814, 86.441),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+  const MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final main = Get.put(MainController());
     final PageController pageController = PageController(initialPage: 0);
 
     return Scaffold(
         backgroundColor: Colors.white,
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.red,
-          onPressed: () {},
-          child: const Text(
-            "SOS",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-          ),
+        floatingActionButton: Container(
+          height: 70,
+          width: 70,
+          child: Obx(() => FittedBox(
+                child: main.page.value == 2
+                    ? const SizedBox(
+                        height: 0,
+                        width: 0,
+                      )
+                    : FloatingActionButton(
+                        shape: CircleBorder(),
+                        backgroundColor: Colors.red,
+                        onPressed: () {},
+                        child: const Text(
+                          "SOS",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+              )),
         ),
-        bottomNavigationBar: GNav(
-            onTabChange: (e) {
-              pageController.animateToPage(e,
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.linear);
-            },
-            tabs: const [
-              GButton(
-                icon: Icons.home_outlined,
-                text: "",
-              ),
-              GButton(
-                icon: Icons.search_outlined,
-                text: "",
-              ),
-              GButton(
-                icon: Icons.messenger_outline,
-                text: "",
-              ),
-            ]),
+        bottomNavigationBar: Obx(() => GNav(
+                onTabChange: (e) {
+                  pageController.animateToPage(e,
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.linear);
+                },
+                tabs: [
+                  GButton(
+                    icon: Icons.home_outlined,
+                    iconSize: main.page.value==0?25:17,
+                  ),
+                  GButton(
+                    icon: Icons.search_outlined,
+                    iconSize: main.page.value==1?25:17,
+                  ),
+                  GButton(
+                    icon: Icons.messenger_outline,
+                    iconSize: main.page.value==2?25:17,
+                  ),
+                ])),
         body: PageView(
           controller: pageController,
+          onPageChanged: (e) {
+            main.page.value = e;
+          },
           physics: const NeverScrollableScrollPhysics(),
-          children: [const MapScreen(),  NewsScreen() , CalamityInfo(),],
+          children: [
+            const MapScreen(),
+            NewsScreen(),
+            CalamityInfo(),
+          ],
         ));
   }
 }
