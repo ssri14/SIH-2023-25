@@ -1,13 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:untitled/features/main/screens/calamity_info.dart';
 import 'package:untitled/features/main/screens/map_screen.dart';
 import 'package:untitled/features/main/screens/news_screen.dart';
 
+import '../controller/api_controller.dart';
+
 class MainScreen extends StatelessWidget {
+  final apiController = Get.put(ApiController());
   MainScreen({super.key});
 
   static const CameraPosition _kGooglePlex = CameraPosition(
@@ -26,6 +31,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final PageController pageController = PageController(initialPage: 0);
 
     return Scaffold(

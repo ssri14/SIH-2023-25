@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:untitled/dummy/dummy.dart';
+import 'package:untitled/features/main/controller/api_controller.dart';
 
+import '../../../routes/routes.dart';
 import '../controller/chip_controller.dart';
 
 class NewsScreen extends StatefulWidget {
-  NewsScreen({Key? key}) : super(key: key);
+  const NewsScreen({Key? key}) : super(key: key);
 
   @override
   _NewsScreenState createState() => _NewsScreenState();
@@ -14,74 +17,74 @@ class NewsScreen extends StatefulWidget {
 
 class _NewsScreenState extends State<NewsScreen> {
   final TextEditingController _searchController = TextEditingController();
+  final ApiController apiController = Get.put(ApiController());
   final ChipController chipController = Get.put(ChipController());
   bool _showClearButton = false;
+  late var newsData;
   List<String> listData = List.generate(10, (index) => 'Item ${index + 1}');
 
   @override
   Widget build(BuildContext context) {
+    newsData = apiController.news;
+    chipController.filteredNews.value = newsData;
+    // chipController.filteredNews.value =chipController.filteredNews;
+    debugPrint('Final filtered list ${chipController.filteredNews}');
     return Scaffold(
-      backgroundColor: Color(0xFFFAFAFA),
+      backgroundColor: const Color(0xFFFAFAFA),
+
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 10, 15, 7),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(60),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color(0x19000000),
-                            blurRadius: 4,
-                            offset: Offset(0, 4),
-                            spreadRadius: 0,
-                          ),
-                        ],
-                      ),
-                      child: TextField(
-                        controller: _searchController,
-                        onChanged: (value) {
-                          setState(() {
-                            _showClearButton = value.isNotEmpty;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Search',
-                          border: InputBorder.none,
-                          // Remove the border
-                          prefixIcon: const Icon(Icons.search),
-                          suffixIcon: _showClearButton
-                              ? IconButton(
-                                  icon: const Icon(Icons.clear),
-                                  onPressed: () {
-                                    setState(() {
-                                      _searchController.clear();
-                                      _showClearButton = false;
-                                    });
-                                  },
-                                )
-                              : const SizedBox(),
-                          hintStyle: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(60),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x19000000),
+                      blurRadius: 4,
+                      offset: Offset(0, 4),
+                      spreadRadius: 0,
+                    ),
+                  ],
+                ),
+                child: TextFormField(
+                  controller: _searchController,
+                  validator: (val) {
+                    if (val == null || val.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    chipController.query.value = value;
+                    chipController.filtering(newsData);
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    border: InputBorder.none,
+                    // Remove the border
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: _showClearButton
+                        ? IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              setState(() {
+                                _searchController.clear();
+                                _showClearButton = false;
+                              });
+                            },
+                          )
+                        : const SizedBox(),
+                    hintStyle: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      // Handle filter button tap
-                    },
-                    icon: const Icon(Icons.filter_list),
-                  ),
-                ],
+                ),
               ),
             ),
             Padding(
@@ -112,36 +115,17 @@ class _NewsScreenState extends State<NewsScreen> {
                                 selectedShadowColor: Colors.blue,
 
                                 onSelected: (bool selected) {
-                                  if (index == 0) {
-                                    if (selected) {
-                                      chipController.boolList.value = [
-                                        true,
-                                        true,
-                                        true,
-                                        true
-                                      ];
-                                    } else {
-                                      chipController.boolList.value = [
-                                        false,
-                                        false,
-                                        false,
-                                        false
-                                      ];
-                                    }
-                                  }
-
                                   chipController.boolList[index] = selected;
                                   final category = filter['category'];
                                   if (selected) {
                                     chipController.addToList(category);
                                     debugPrint(
-                                        'final list ${chipController.finalType.value}');
+                                        'final list ${chipController.finalType}');
                                   } else {
                                     chipController.removeFromList(category);
                                     debugPrint(
-                                        'final list ${chipController.finalType.value}');
+                                        'final list ${chipController.finalType}');
                                   }
-                                  chipController.updatefilterlist();
                                 },
                               ));
                         }),
@@ -151,55 +135,101 @@ class _NewsScreenState extends State<NewsScreen> {
                 ),
               ),
             ),
-            Expanded(
-                child: Obx(
-              () => ListView.builder(
-                itemCount: chipController.filterData.value.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final calamity = chipController.filterData.value[index];
-                  return Card(
-                    elevation: 8.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 10.0,
-                      vertical: 6.0,
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 10.0,
+            Expanded(child: Obx(
+              () {
+               if (apiController.isLoading.value) {
+                 return Shimmer.fromColors(
+                    period: const Duration(seconds: 2),
+                    baseColor: Colors.grey[400]!,
+                    highlightColor: Colors.grey[200]!,
+                    child:  ListView.builder(
+                        itemCount: 10,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Card(
+                            elevation: 8.0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 10.0,
+                              vertical: 6.0,
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const ListTile(
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20.0,
+                                  vertical: 10.0,
+                                ),
+                              ),
+                            ),
+                          );
+                        })
+                );
+               } else {
+                 return ListView.builder(
+                  itemCount: chipController.filteredNews.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final calamity = chipController.filteredNews[index];
+                    if (calamity.news!.contains(chipController.query.value) &&
+                        calamity.type!
+                            .contains(chipController.finalType.join("/"))) {
+                      return Card(
+                        elevation: 8.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        leading: CircleAvatar(
-                          radius: 25,
-                          backgroundImage: AssetImage(
-                            getImageForCalamityType(
-                                calamity['type']!, calamityImage),
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 10.0,
+                          vertical: 6.0,
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20.0,
+                              vertical: 10.0,
+                            ),
+                            leading: CircleAvatar(
+                              radius: 25,
+                              backgroundImage: AssetImage(
+                                getImageForCalamityType(
+                                    calamity.type!, calamityImage),
+                              ),
+                            ),
+                            title: Text(
+                              calamity.news!,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text(
+                              calamity.type!,
+                              style: const TextStyle(fontSize: 13),
+                            ),
+                            trailing: Text(
+                              calamity.time!,
+                              // DateFormat('HH:mm').format(DateTime.now()),
+                              style: const TextStyle(
+                                  fontSize:
+                                      12), // You can adjust the font size
+                            ),
+                            onTap: ()=>Get.toNamed(Routes.calamityinfo, arguments: calamity),
                           ),
                         ),
-                        title: Text(
-                          calamity['news']!,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          calamity['type']!,
-                          style: const TextStyle(fontSize: 13),
-                        ),
-                        trailing: Text(
-                          DateFormat('HH:mm').format(DateTime.now()),
-                          style: const TextStyle(
-                              fontSize: 12), // You can adjust the font size
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+                      );
+                    } else {
+                      return const SizedBox(
+                        height: 0,
+                      );
+                    }
+                  },
+                );
+               }
+              },
             )),
           ],
         ),
@@ -225,8 +255,7 @@ class _NewsScreenState extends State<NewsScreen> {
   }
 
   String generateCalamityTypeString() {
-    final calamityTypes = chipController.finalType.toList();
-    calamityTypes.sort(); // Sort the selected types for consistency
-    return calamityTypes.join('/');
+    chipController.finalType; // Sort the selected types for consistency
+    return chipController.finalType.join('/');
   }
 }
