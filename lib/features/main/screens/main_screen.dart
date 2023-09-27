@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'package:get/get_core/src/get_main.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:untitled/features/main/controller/main_controller.dart';
 import 'package:untitled/features/main/screens/calamity_info.dart';
 import 'package:untitled/features/main/screens/map_screen.dart';
 import 'package:untitled/features/main/screens/news_screen.dart';
 
+import '../controller/api_controller.dart';
+
 class MainScreen extends StatelessWidget {
+
+  final apiController = Get.put(ApiController());
+  
+
+  
   const MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final main = Get.put(MainController());
+
     final PageController pageController = PageController(initialPage: 0);
 
     return Scaffold(

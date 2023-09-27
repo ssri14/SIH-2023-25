@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:untitled/data/models/information.dart';
 import 'package:untitled/features/main/controller/calamity_controller.dart';
 import 'package:untitled/res/ProjectImages.dart';
 
@@ -10,13 +9,13 @@ class CalamityInfo extends StatelessWidget {
   CalamityInfo({Key? key}) : super(key: key);
   final height = Get.height;
   final width = Get.width;
-
+  var calamity = Get.arguments;
   final CalamityController myController = Get.put(CalamityController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-
           child: Container(
         height: height,
         width: width,
@@ -30,8 +29,8 @@ class CalamityInfo extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(
-                        top: 20.0, bottom: 28, left: 20),
+                    padding:
+                        const EdgeInsets.only(top: 20.0, bottom: 28, left: 20),
                     child: CircleAvatar(
                       radius: height * 0.05,
                       backgroundImage: ProjectImages.ambulance,
@@ -63,7 +62,6 @@ class CalamityInfo extends StatelessWidget {
                               color: Colors.blue,
                               size: 20,
                             ),
-
                           ],
                         ),
                         SizedBox(
@@ -90,20 +88,19 @@ class CalamityInfo extends StatelessWidget {
               ),
             ),
             const Divider(
-
               color: Color(0xff3C3C43),
               thickness: 0.5,
             ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(),
-
                 child: create(),
               ),
             ),
             Container(
               width: width,
-              height: 100, // Total height of the input area including the grey background
+              height: 100,
+              // Total height of the input area including the grey background
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30.0),
@@ -115,11 +112,10 @@ class CalamityInfo extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: width*0.9,
+                    width: width * 0.9,
                     decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                     color: Color(0xffF2F2F2)
-                    ),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        color: Color(0xffF2F2F2)),
                     height: 50, // Height of the grey background
 
                     child: Padding(
@@ -127,21 +123,18 @@ class CalamityInfo extends StatelessWidget {
                       child: Row(
                         children: [
                           Expanded(
-
                             child: TextField(
-
                               decoration: const InputDecoration(
                                 hintText: 'Type a message...',
                                 border: InputBorder.none, // Remove border
                               ),
-                              onChanged: (String s){
+                              onChanged: (String s) {
                                 myController.chat.value = s;
                               },
                             ),
                           ),
                           IconButton(
-                            onPressed: () {
-                            },
+                            onPressed: () {},
                             icon: const Icon(Icons.send_outlined),
                           ),
                         ],
@@ -151,36 +144,32 @@ class CalamityInfo extends StatelessWidget {
                 ],
               ),
             )
-
-
           ],
         ),
       )),
     );
   }
 
-
-  Widget create(){
-    if(!myController.isloading.value){
+  Widget create() {
+    if (!myController.isloading.value) {
       return ListView.builder(
           itemCount: 5,
           itemBuilder: (BuildContext context, int index) {
             return createContainer("Kaushan", "Ambulance bhejo");
           });
-    }
-    else{
+    } else {
       return Shimmer.fromColors(
-        period: const Duration(seconds: 2),
-        baseColor: Colors.grey[400]!,
-        highlightColor: Colors.grey[200]!,
-        child:  ListView.builder(
-            itemCount: 5,
-            itemBuilder: (BuildContext context, int index) {
-              return createContainer("Kaushan", "Ambulance bhejo");
-            })
-      );
+          period: const Duration(seconds: 2),
+          baseColor: Colors.grey[400]!,
+          highlightColor: Colors.grey[200]!,
+          child: ListView.builder(
+              itemCount: 5,
+              itemBuilder: (BuildContext context, int index) {
+                return createContainer("Kaushan", "Ambulance bhejo");
+              }));
     }
   }
+
   Widget createContainer(String name, String chat) {
     return Container(
       width: width * 0.9,
@@ -223,11 +212,11 @@ class CalamityInfo extends StatelessWidget {
       ),
     );
   }
-  Color givecolor(){
-    if(myController.is_selected.value){
+
+  Color givecolor() {
+    if (myController.is_selected.value) {
       return Colors.blue;
-    }
-    else{
+    } else {
       return Colors.white;
     }
   }

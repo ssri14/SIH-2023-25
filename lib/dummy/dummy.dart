@@ -46,7 +46,7 @@ const dummyData = [
 
 
 List<Map<String, dynamic>> filterChoices = [
-  {'label': 'All', 'icon': Icons.all_inclusive, 'category': 'Ambulance/Fire/Police'},
+
   {
     'label': 'Ambulance',
     'icon': Icons.medical_services,
