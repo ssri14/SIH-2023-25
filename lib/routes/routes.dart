@@ -9,6 +9,7 @@ class Routes {
   static const map = "/map";
   static const calamityinfo = "/";
 
+
 }
 
 class AppRoutes {
