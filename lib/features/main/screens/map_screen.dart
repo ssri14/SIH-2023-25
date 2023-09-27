@@ -24,12 +24,12 @@ class MapScreen extends StatelessWidget {
 
           if (map.selected.isEmpty) {
             for (var it in loc.dummyService) {
-              st.add(loc.createMarker(LatLng(it.lat, it.lng), it.name));
+              st.add(loc.createMarker(it));
             }
           } else {
             for (var it in loc.dummyService) {
               if (map.selected.contains(it.name)) {
-                st.add(loc.createMarker(LatLng(it.lat, it.lng), it.name));
+                st.add(loc.createMarker(it));
               }
             }
           }
@@ -51,15 +51,17 @@ class MapScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildFilterChip("1", Icons.local_police_outlined, 0, map),
+              buildFilterChip("police", Icons.local_police_outlined, 0, map),
               const SizedBox(
                 width: 3,
               ),
-              buildFilterChip("2", Icons.medical_services_outlined, 1, map),
+              buildFilterChip(
+                  "ambulance", Icons.medical_services_outlined, 1, map),
               const SizedBox(
                 width: 3,
               ),
-              buildFilterChip("3", Icons.fire_extinguisher_outlined, 2, map),
+              buildFilterChip(
+                  "Fire Dept.", Icons.fire_extinguisher_outlined, 2, map),
             ],
           ),
         ),
