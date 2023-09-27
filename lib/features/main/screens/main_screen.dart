@@ -27,6 +27,7 @@ class MainScreen extends StatelessWidget {
     final PageController pageController = PageController(initialPage: 0);
 
     return Scaffold(
+
         backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.red,
@@ -61,10 +62,8 @@ class MainScreen extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           children: [const MapScreen(), Container(), Container()],
         ));
+
   }
 
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  }
+
 }
