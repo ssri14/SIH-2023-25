@@ -6,12 +6,15 @@ import 'package:untitled/features/main/screens/calamity_info.dart';
 import 'package:untitled/features/main/screens/map_screen.dart';
 import 'package:untitled/features/main/screens/news_screen.dart';
 
+import '../controller/user_controller.dart';
+
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final main = Get.put(MainController());
+    final UserController user = Get.find();
     final PageController pageController = PageController(initialPage: 0);
 
     return Scaffold(

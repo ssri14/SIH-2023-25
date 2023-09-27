@@ -1,5 +1,3 @@
-import 'package:get/get.dart';
-
 class Calamity {
   String? news;
   String? type;

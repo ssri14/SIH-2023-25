@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:dio/src/response.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:untitled/data/network/api/constant/endpoints.dart';
 
@@ -35,5 +36,10 @@ class UserApi {
     } catch (e) {
       return null;
     }
+  }
+
+  Future<Response> getOtherUsers(String adminName) async {
+    final url = '${Endpoints.baseUrl}${Endpoints.getSubordinates}/$adminName/';
+    return await dio.get(url);
   }
 }
