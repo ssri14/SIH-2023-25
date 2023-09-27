@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:untitled/routes/routes.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 

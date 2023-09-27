@@ -17,6 +17,7 @@ class Endpoints {
 
   static const login = "/loginUser";
   static const updateLocation = "/updateLocation/";
+  static const getSubordinates = "";
 
 
 }

@@ -22,4 +22,6 @@ class RescueService {
   Map<String, dynamic> toJson() => _$RescueServiceToJson(this);
 
   factory RescueService.fromJson(json) => _$RescueServiceFromJson(json);
+
+
 }

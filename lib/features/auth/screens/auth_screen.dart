@@ -19,8 +19,10 @@ class AuthScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             buildTextField(userName, false),
+            SizedBox(height: 20,),
             buildTextField(password, true),
             MaterialButton(
+              color: Colors.red,
               onPressed: () {
                 if(userName.value.text.isEmpty || password.value.text.isEmpty) return;
                 user.loginUser(userName.value.text, password.value.text);
