@@ -8,12 +8,26 @@ import '../../../data/network/dio_client.dart'; // Import your NewsApi class
 class ApiController extends GetxController {
   final NewsApi _newsApi = NewsApi(DioClient(Dio()));
   final Rx<bool> isLoading = false.obs;
+  RxList<bool> approvalType = ([false,false,false]).obs;
   RxList<Calamity> news = RxList<Calamity>();
+
+
 
   @override
   void onInit() {
     super.onInit();
     fetchNewsData();
+  }
+
+  Future<bool> sendNewsApi( String district, String news, String type, String time) async{
+    try{
+      await _newsApi.sendNewsApi(district, news, type, time);
+      return true;
+    }catch (error) {
+      // Handle errors here if necessary
+      print('Error sending approval: $error');
+    }
+    return false;
   }
 
   Future<void> fetchNewsData() async {
