@@ -39,7 +39,11 @@ dependencies:
   google_maps_flutter: ^2.5.0
   dio: ^5.3.3
   google_nav_bar: ^5.0.6
+
   intl: ^0.18.1
+
+  location: ^5.0.3
+
 
 dev_dependencies:
   flutter_test:

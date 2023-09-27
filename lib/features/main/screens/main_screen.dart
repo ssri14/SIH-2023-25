@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:untitled/features/main/screens/map_screen.dart';
 
 class MainScreen extends StatelessWidget {
   MainScreen({super.key});
@@ -15,8 +16,6 @@ class MainScreen extends StatelessWidget {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
-
-
   static const CameraPosition _kLake = CameraPosition(
       bearing: 192.8334901395799,
       target: LatLng(23.814, 86.441),
@@ -25,40 +24,43 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final PageController pageController = PageController(initialPage: 0);
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: const Text('To the lake!'),
-        icon: const Icon(Icons.directions_boat),
-      ),
-      appBar: AppBar(
-        elevation: 8,
-      ),
-      bottomNavigationBar: const GNav(tabs: [
-        GButton(
-          icon: Icons.home_outlined,
-          text: "home",
+        backgroundColor: Colors.white,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.red,
+          onPressed: _goToTheLake,
+          child: const Text(
+            "SOS",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+          ),
         ),
-        GButton(
-          icon: Icons.home_outlined,
-          text: "sos",
-        ),
-        GButton(
-          icon: Icons.home_outlined,
-          text: "maps",
-        ),
-      ]),
-      body: SafeArea(
-        child: GoogleMap(
-          mapType: MapType.normal,
-          initialCameraPosition: _kGooglePlex,
-          onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
-          },
-        ),
-      ),
-    );
+        bottomNavigationBar: GNav(
+            onTabChange: (e) {
+              pageController.animateToPage(e,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.linear);
+            },
+            tabs: const [
+              GButton(
+                icon: Icons.home_outlined,
+                text: "home",
+              ),
+              GButton(
+                icon: Icons.home_outlined,
+                text: "sos",
+              ),
+              GButton(
+                icon: Icons.home_outlined,
+                text: "maps",
+              ),
+            ]),
+        body: PageView(
+          controller: pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [const MapScreen(), Container(), Container()],
+        ));
   }
 
   Future<void> _goToTheLake() async {
