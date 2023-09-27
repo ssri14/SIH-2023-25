@@ -8,7 +8,7 @@ class DioClient {
 
   DioClient(this._dio) {
     _dio
-      ..options.baseUrl = Endpoints.baseUrl
+      ..options.baseUrl = Endpoints.baseNewsUrl
       ..options.connectTimeout = Endpoints.connectionTimeout
       ..options.receiveTimeout = Endpoints.receiveTimeout
       ..options.responseType = ResponseType.json;
