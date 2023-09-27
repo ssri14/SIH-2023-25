@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:untitled/data/models/service.dart';
 import 'package:untitled/services/location.dart';
 
 class LocationController extends GetxController {
@@ -15,6 +16,14 @@ class LocationController extends GetxController {
   Rx<Marker> myMarker =
       const Marker(markerId: MarkerId("me"), position: LatLng(0, 0)).obs;
 
+  RxList<Marker> services = <Marker>[].obs;
+
+  final dummyService = [
+    RescueService(name: "1", id : "1234" , phoneNo: "222" ,lat: 23.2 ,lng: 86.44),
+    RescueService(name: "2", id : "1234" , phoneNo: "222" ,lat: 23.4 ,lng: 86.41),
+    RescueService(name: "3", id : "1234" , phoneNo: "222" ,lat: 23.4 ,lng: 86.49),
+  ];
+
   Rx<Completer<GoogleMapController>> controller =
       Completer<GoogleMapController>().obs;
 
@@ -22,6 +31,11 @@ class LocationController extends GetxController {
   void onInit() {
     super.onInit();
     checkPermission();
+    final list = <Marker>[];
+    for (RescueService it in dummyService) {
+      list.add(createMarker(LatLng(it.lat, it.lng), it.name));
+    }
+    services.value = list;
   }
 
   Future<void> goToLocation(CameraPosition pos) async {
@@ -35,18 +49,18 @@ class LocationController extends GetxController {
       if (value == true) {
         startListeningLocation(
           (p0) {
-            myMarker.value = createMarker(p0);
+            myMarker.value = createMarker(p0, 'me');
             goToLocation(createCamera(p0));
+
           },
         );
       }
     });
   }
 
-  Marker createMarker(LatLng p0) {
+  Marker createMarker(LatLng p0, String name) {
     return Marker(
-        markerId: const MarkerId("me"),
-        position: LatLng(p0.latitude, p0.longitude));
+        markerId: MarkerId(name), position: LatLng(p0.latitude, p0.longitude));
   }
 
   checkPermission() {
@@ -68,7 +82,7 @@ class LocationController extends GetxController {
       bearing: 0.0,
       target: LatLng(loc.latitude, loc.longitude),
       tilt: 0.005,
-      zoom: 16);
+      zoom: 6);
 
   @override
   void onClose() {

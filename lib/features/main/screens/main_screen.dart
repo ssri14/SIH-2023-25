@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:untitled/features/main/controller/main_controller.dart';
 import 'package:untitled/features/main/screens/map_screen.dart';
 
 class MainScreen extends StatelessWidget {
@@ -30,34 +28,34 @@ class MainScreen extends StatelessWidget {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        floatingActionButton: FloatingActionButton.extended(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.red,
           onPressed: _goToTheLake,
-          label: const Text('To the lake!'),
-          icon: const Icon(Icons.directions_boat),
-        ),
-        appBar: AppBar(
-          elevation: 8,
+          child: const Text(
+            "SOS",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+          ),
         ),
         bottomNavigationBar: GNav(
-                onTabChange: (e) {
-                  pageController.animateToPage(e,
-                      duration: const Duration(milliseconds: 200),
-                      curve: Curves.linear);
-                },
-                tabs: const [
-                  GButton(
-                    icon: Icons.home_outlined,
-                    text: "home",
-                  ),
-                  GButton(
-                    icon: Icons.home_outlined,
-                    text: "sos",
-                  ),
-                  GButton(
-                    icon: Icons.home_outlined,
-                    text: "maps",
-                  ),
-                ]),
+            onTabChange: (e) {
+              pageController.animateToPage(e,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.linear);
+            },
+            tabs: const [
+              GButton(
+                icon: Icons.home_outlined,
+                text: "home",
+              ),
+              GButton(
+                icon: Icons.home_outlined,
+                text: "sos",
+              ),
+              GButton(
+                icon: Icons.home_outlined,
+                text: "maps",
+              ),
+            ]),
         body: PageView(
           controller: pageController,
           physics: const NeverScrollableScrollPhysics(),
