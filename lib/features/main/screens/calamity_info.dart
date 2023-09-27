@@ -20,12 +20,12 @@ class CalamityInfo extends StatelessWidget {
           child: Container(
         height: height,
         width: width,
-        color: Color(0xffF1F2F5),
+        color: const Color(0xffF1F2F5),
         child: Column(
           children: [
             Container(
               width: width,
-              color: Color(0xffF1F2F5),
+              color: const Color(0xffF1F2F5),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -37,8 +37,8 @@ class CalamityInfo extends StatelessWidget {
                       backgroundImage: ProjectImages.ambulance,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0, top: 24),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 20.0, top: 24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -89,7 +89,7 @@ class CalamityInfo extends StatelessWidget {
                 ],
               ),
             ),
-            Divider(
+            const Divider(
 
               color: Color(0xff3C3C43),
               thickness: 0.5,
@@ -104,7 +104,7 @@ class CalamityInfo extends StatelessWidget {
             Container(
               width: width,
               height: 100, // Total height of the input area including the grey background
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30.0),
                   topRight: Radius.circular(30),
@@ -116,7 +116,7 @@ class CalamityInfo extends StatelessWidget {
                 children: [
                   Container(
                     width: width*0.9,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                      color: Color(0xffF2F2F2)
                     ),
@@ -130,7 +130,7 @@ class CalamityInfo extends StatelessWidget {
 
                             child: TextField(
 
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: 'Type a message...',
                                 border: InputBorder.none, // Remove border
                               ),
@@ -142,7 +142,7 @@ class CalamityInfo extends StatelessWidget {
                           IconButton(
                             onPressed: () {
                             },
-                            icon: Icon(Icons.send_outlined),
+                            icon: const Icon(Icons.send_outlined),
                           ),
                         ],
                       ),
@@ -170,7 +170,7 @@ class CalamityInfo extends StatelessWidget {
     }
     else{
       return Shimmer.fromColors(
-        period: Duration(seconds: 2),
+        period: const Duration(seconds: 2),
         baseColor: Colors.grey[400]!,
         highlightColor: Colors.grey[200]!,
         child:  ListView.builder(
@@ -184,16 +184,16 @@ class CalamityInfo extends StatelessWidget {
   Widget createContainer(String name, String chat) {
     return Container(
       width: width * 0.9,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(20)),
         color: Colors.white,
       ),
       height: 100.0,
-      margin: EdgeInsets.all(16.0),
-      padding: EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          Image(
+          const Image(
             image: ProjectImages.ambulance,
           ),
           Padding(
@@ -208,13 +208,13 @@ class CalamityInfo extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: width * 0.05),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Text(
                   chat,
                   style: TextStyle(
-                      color: Color(0xff5D6066), fontSize: width * 0.04),
+                      color: const Color(0xff5D6066), fontSize: width * 0.04),
                 )
               ],
             ),
