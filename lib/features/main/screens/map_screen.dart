@@ -6,6 +6,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:untitled/features/main/controller/location_controller.dart';
 import 'package:untitled/features/main/controller/map_controller.dart';
+import 'package:untitled/features/main/controller/user_controller.dart';
+
+import '../../../data/models/User.dart';
 
 class MapScreen extends StatelessWidget {
   const MapScreen({super.key});
@@ -14,26 +17,20 @@ class MapScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final LocationController loc = Get.put(LocationController());
     final MapController map = Get.put(MapController());
-
+    final UserController user = Get.find();
+    user.getOtherUsers();
     // loc.goToLocation(loc.createCamera(fromLocation(loc.location.value!)));
 
     return Stack(
       children: [
         Obx(() {
-          final st = <Marker>{};
+          var st = <Marker>{};
 
-          if (map.selected.isEmpty) {
-            for (var it in loc.dummyService) {
+          for(var it in user.allUsers){
+            if( map.selected.isEmpty ||map.selected.contains(it.department)) {
               st.add(loc.createMarker(it));
             }
-          } else {
-            for (var it in loc.dummyService) {
-              if (map.selected.contains(it.name)) {
-                st.add(loc.createMarker(it));
-              }
-            }
           }
-
           st.add(loc.myMarker.value);
 
           return GoogleMap(
@@ -65,6 +62,16 @@ class MapScreen extends StatelessWidget {
             ],
           ),
         ),
+        Positioned(
+            top: 120,
+            right: 20,
+            child: FloatingActionButton(
+              onPressed: () {
+                loc.goToLocation(
+                    CameraPosition(target: fromLocation(loc.location.value!)));
+              },
+              child: const Icon(Icons.gps_fixed_rounded),
+            )),
       ],
     );
   }

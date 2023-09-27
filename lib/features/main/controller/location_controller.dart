@@ -9,8 +9,11 @@ import 'package:location/location.dart';
 import 'package:untitled/data/models/service.dart';
 import 'package:untitled/data/network/dio_client.dart';
 import 'package:untitled/data/network/user_api.dart';
+import 'package:untitled/features/main/controller/user_controller.dart';
 import 'package:untitled/res/ProjectImages.dart';
 import 'package:untitled/services/location.dart';
+
+import '../../../data/models/User.dart';
 
 class LocationController extends GetxController {
   final _locationService = LocationService();
@@ -24,30 +27,9 @@ class LocationController extends GetxController {
       const Marker(markerId: MarkerId("me"), position: LatLng(0, 0)).obs;
 
   RxList<Marker> services = <Marker>[].obs;
+  final UserController user = Get.find();
 
-  final dummyService = [
-    RescueService(
-        name: "police",
-        type: "police",
-        id: "1234",
-        phoneNo: "222",
-        lat: 23.814,
-        lng: 86.44220),
-    RescueService(
-        name: "police",
-        type: "police",
-        id: "1234",
-        phoneNo: "222",
-        lat: 23.814,
-        lng: 86.44220),
-    RescueService(
-        name: "ambulance",
-        type: "ambulance",
-        id: "1234",
-        phoneNo: "222",
-        lat: 23.4,
-        lng: 86.49),
-  ];
+
 
   Rx<Completer<GoogleMapController>> controller =
       Completer<GoogleMapController>().obs;
@@ -57,22 +39,38 @@ class LocationController extends GetxController {
     super.onInit();
     //UserApi(DioClient(Dio())).loginUser("lava", "123");
     checkPermission();
-    final list = <Marker>[];
+
     icons["police"] = await BitmapDescriptor.fromAssetImage(
         const ImageConfiguration(size: Size(70, 70)), 'assets/police.png');
-    icons["ambulance"] = await BitmapDescriptor.fromAssetImage(
+    icons["health"] = await BitmapDescriptor.fromAssetImage(
         const ImageConfiguration(size: Size(70, 70)), 'assets/Ambulance.png');
+    icons["fire"] = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(size: Size(70, 70)), 'assets/Firetruck.png');
     icons["me"] = BitmapDescriptor.defaultMarker;
-    for (RescueService it in dummyService) {
-      // TODO(change here)
-      list.add(createMarker(it));
-    }
-    services.value = list;
+
   }
 
   Future<void> goToLocation(CameraPosition pos) async {
     final GoogleMapController _controller = await controller.value.future;
-    await _controller.animateCamera(CameraUpdate.newCameraPosition(pos));
+    if (_controller != null) {
+      print("Animating camera to: ${pos.target}");
+      _controller.animateCamera(CameraUpdate.newCameraPosition(pos));
+    } else {
+      print("Controller is null!");
+    }
+
+  }
+
+  focusOnLocation(double lat, double long) async {
+    final c = await controller.value.future;
+    c.animateCamera(CameraUpdate.newLatLng(LatLng(lat, long)));
+  }
+
+  createMarkerList(List<User> l){
+    final list = <Marker>[];
+    for(var it in l){
+      list.add(createMarker(it));
+    }
   }
 
   checkServiceEnabled() {
@@ -81,26 +79,26 @@ class LocationController extends GetxController {
       if (value == true) {
         startListeningLocation(
           (p0) async {
-            myMarker.value = createMarker(RescueService(
-                name: "me",
-                type: "me",
-                id: "123",
-                phoneNo: "3443",
-                lat: p0.latitude,
-                lng: p0.longitude));
+            myMarker.value = createMarker(User(
+              name: "Me",
+              department: "me",
+              lat: p0.latitude,
+              long: p0.longitude
+            ));
             camera.value = createCamera(p0);
             goToLocation(createCamera(p0));
+            user.updateUserLocation(p0, user.user.value!.id!);
           },
         );
       }
     });
   }
 
-  Marker createMarker(RescueService p0) {
-    final type = p0.type;
-    final name = p0.name;
-    final p1 = p0.lat;
-    final p2 = p0.lng;
+  Marker createMarker(User p0) {
+    final type = p0.department.toString();
+    final name = p0.name.toString();
+    final p1 = p0.lat!.toDouble();
+    final p2 = p0.long!.toDouble();
     if (icons[type] == null) icons[type] = BitmapDescriptor.defaultMarker;
     return Marker(
         icon: icons[type]!,
@@ -114,7 +112,7 @@ class LocationController extends GetxController {
                 child: bottomSheet(p0)),
           );
         },
-        markerId: MarkerId(name),
+        markerId: MarkerId(p0.id.toString()),
         position: LatLng(p1, p2));
   }
 
@@ -145,11 +143,11 @@ class LocationController extends GetxController {
     super.onClose();
   }
 
-  Column bottomSheet(RescueService p0) {
+  Column bottomSheet(User p0) {
     ImageProvider image = ProjectImages.police;
-    if (p0.type == "ambulance") {
+    if (p0.department == "ambulance") {
       image = ProjectImages.ambulance;
-    } else if (p0.type == "fire") {
+    } else if (p0.department == "fire") {
       image = ProjectImages.firetruck;
     }
     return Column(
@@ -159,11 +157,11 @@ class LocationController extends GetxController {
           child: Image(image: image),
         ),
         Text(
-          p0.name,
+          p0.name!,
           style: const TextStyle(fontSize: 20),
         ),
         Text(
-          p0.type,
+          p0.department!,
           style: const TextStyle(fontSize: 20),
         ),
       ],

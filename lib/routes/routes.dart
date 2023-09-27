@@ -6,8 +6,8 @@ import 'package:untitled/features/main/screens/map_screen.dart';
 import 'package:untitled/features/main/screens/news_screen.dart';
 
 class Routes {
-  static const main = "/";
-  static const login = "/login";
+  static const main = "/main";
+  static const login = "/";
   static const map = "/map";
   static const news = "/news";
   static const calamityinfo = "/calamity";
