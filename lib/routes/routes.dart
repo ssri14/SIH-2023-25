@@ -15,7 +15,7 @@ class Routes {
 
 class AppRoutes {
   static List<GetPage> get getPage => [
-        GetPage(name: Routes.main, page: () => const MainScreen()),
+        GetPage(name: Routes.main, page: () =>  MainScreen()),
         GetPage(name: Routes.login, page: () => const AuthScreen()),
         GetPage(name: Routes.map, page: () => const MapScreen()),
         GetPage(name: Routes.calamityinfo, page: () => CalamityInfo()),

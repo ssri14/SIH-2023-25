@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:untitled/data/models/calamity_model.dart';
 import 'package:untitled/data/network/dio_client.dart';
 
@@ -32,6 +31,19 @@ class NewsApi {
     } else {
       print(response.statusMessage);
       return [];
+    }
+  }
+
+  Future<bool> sendNewsApi(
+      String district, String news, String type, String time) async {
+    var data = {"news": news, "type": type, "location": district, "time": time};
+    var response = await dioClient
+        .post('${Endpoints.baseNewsUrl}${Endpoints.news}/postNews', data: data);
+
+    if(response.statusCode==200){
+     return true;
+    }else{
+      return false;
     }
   }
 }
