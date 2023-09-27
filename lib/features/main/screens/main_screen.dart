@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:untitled/features/main/screens/calamity_info.dart';
 import 'package:untitled/features/main/screens/map_screen.dart';
+import 'package:untitled/features/main/screens/news_screen.dart';
 
 class MainScreen extends StatelessWidget {
   MainScreen({super.key});
@@ -28,11 +29,10 @@ class MainScreen extends StatelessWidget {
     final PageController pageController = PageController(initialPage: 0);
 
     return Scaffold(
-
         backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.red,
-          onPressed: (){},
+          onPressed: () {},
           child: const Text(
             "SOS",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
@@ -61,10 +61,7 @@ class MainScreen extends StatelessWidget {
         body: PageView(
           controller: pageController,
           physics: const NeverScrollableScrollPhysics(),
-          children: [const MapScreen(), CalamityInfo(), Container()],
+          children: [const MapScreen(),  NewsScreen() , CalamityInfo(),],
         ));
-
   }
-
-
 }
