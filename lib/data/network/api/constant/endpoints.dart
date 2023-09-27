@@ -4,7 +4,7 @@ class Endpoints {
   //api key
   static const String API_KEY = '';
   // base url
-  static const String baseUrl = "https://jade-mushy-lion.cyclic.cloud";
+  static const String baseNewsUrl = "https://jade-mushy-lion.cyclic.cloud";
   static const String news = "/news";
 
   // Receive timeout

@@ -14,7 +14,7 @@ class NewsApi {
   Future<List<Calamity>> getNewsApi(String district) async {
     district = 'dhanbad';
     var response = await dioClient.get(
-      '${Endpoints.baseUrl}${Endpoints.news}/$district',
+      '${Endpoints.baseNewsUrl}${Endpoints.news}/$district',
     );
 
     if (response.statusCode == 200) {
