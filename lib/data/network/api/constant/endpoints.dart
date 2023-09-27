@@ -5,7 +5,7 @@ class Endpoints {
 
   static const String baseNewsUrl = "https://jade-mushy-lion.cyclic.cloud";
   static const String news = "/news";
-
+  static const String basechaturl = "https://jade-mushy-lion.cyclic.cloud/chat";
   static const String baseUrl = "https://jade-mushy-lion.cyclic.cloud/user";
 
 

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:untitled/data/models/calamity_model.dart';
 import 'package:untitled/data/network/dio_client.dart';
 
