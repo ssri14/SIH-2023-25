@@ -16,12 +16,11 @@ class ApiController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchNewsData();
   }
 
-  Future<bool> sendNewsApi( String district, String news, String type, String time) async{
+  Future<bool> sendNewsApi( String district, String news, String type, String time , double lat , double ng ) async{
     try{
-      await _newsApi.sendNewsApi(district, news, type, time);
+      await _newsApi.sendNewsApi(district, news, type, time,lat,ng);
       return true;
     }catch (error) {
       // Handle errors here if necessary
@@ -30,18 +29,21 @@ class ApiController extends GetxController {
     return false;
   }
 
-  Future<void> fetchNewsData() async {
+  Future<void> fetchNewsData(String district) async {
     try {
       isLoading.value = true;
       // Replace 'your_district' with the actual district you want to fetch news for
-      var district = 'dhanbad';
+      //var district = 'dhanbad';
       final calamityList = await _newsApi.getNewsApi(district);
       news.assignAll(calamityList);
       isLoading.value = false;
+      refresh();
     }
     catch (error) {
       // Handle errors here if necessary
+
       print('Error fetching data: $error');
     }
+
   }
 }

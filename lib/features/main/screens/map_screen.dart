@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:untitled/features/main/controller/api_controller.dart';
 import 'package:untitled/features/main/controller/location_controller.dart';
 import 'package:untitled/features/main/controller/map_controller.dart';
 import 'package:untitled/features/main/controller/user_controller.dart';
-
-import '../../../data/models/User.dart';
 
 class MapScreen extends StatelessWidget {
   const MapScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final LocationController loc = Get.put(LocationController());
+    final LocationController loc = Get.find();
+    final ApiController api = Get.find();
     final MapController map = Get.put(MapController());
     final UserController user = Get.find();
     user.getOtherUsers();
@@ -26,9 +26,17 @@ class MapScreen extends StatelessWidget {
         Obx(() {
           var st = <Marker>{};
 
-          for(var it in user.allUsers){
-            if( map.selected.isEmpty ||map.selected.contains(it.department)) {
+          for (var it in user.allUsers) {
+            if (map.selected.isEmpty || map.selected.contains(it.department)) {
               st.add(loc.createMarker(it));
+            }
+          }
+          for (var it in api.news) {
+            if (it.isApproved != "False") {
+              st.add(Marker(
+                  markerId: MarkerId(it.sId!),
+                  position: LatLng(it.lat!.toDouble(), it.lng!.toDouble()),
+                  icon: BitmapDescriptor.defaultMarkerWithHue(120)));
             }
           }
           st.add(loc.myMarker.value);
@@ -53,12 +61,11 @@ class MapScreen extends StatelessWidget {
                 width: 3,
               ),
               buildFilterChip(
-                  "ambulance", Icons.medical_services_outlined, 1, map),
+                  "health", Icons.medical_services_outlined, 1, map),
               const SizedBox(
                 width: 3,
               ),
-              buildFilterChip(
-                  "Fire Dept.", Icons.fire_extinguisher_outlined, 2, map),
+              buildFilterChip("fire", Icons.fire_extinguisher_outlined, 2, map),
             ],
           ),
         ),

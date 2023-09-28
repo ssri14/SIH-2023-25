@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:untitled/dummy/dummy.dart';
 import 'package:untitled/features/main/controller/api_controller.dart';
+import 'package:untitled/features/main/controller/user_controller.dart';
 
 import '../../../routes/routes.dart';
 import '../controller/chip_controller.dart';
@@ -17,8 +20,9 @@ class NewsScreen extends StatefulWidget {
 
 class _NewsScreenState extends State<NewsScreen> {
   final TextEditingController _searchController = TextEditingController();
-  final ApiController apiController = Get.put(ApiController());
+  final ApiController apiController = Get.find();
   final ChipController chipController = Get.put(ChipController());
+  final UserController user = Get.find();
   bool _showClearButton = false;
   late var newsData;
   List<String> listData = List.generate(10, (index) => 'Item ${index + 1}');
@@ -29,6 +33,7 @@ class _NewsScreenState extends State<NewsScreen> {
     chipController.filteredNews.value = newsData;
     // chipController.filteredNews.value =chipController.filteredNews;
     debugPrint('Final filtered list ${chipController.filteredNews}');
+    log("$newsData",name:"NEWS");
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
 
@@ -169,65 +174,71 @@ class _NewsScreenState extends State<NewsScreen> {
                         })
                 );
                } else {
-                 return ListView.builder(
-                  itemCount: chipController.filteredNews.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final calamity = chipController.filteredNews[index];
-                    if (calamity.news!.contains(chipController.query.value) &&
-                        calamity.type!
-                            .contains(chipController.finalType.join("/"))) {
-                      return Card(
-                        elevation: 8.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 10.0,
-                          vertical: 6.0,
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
+                 return RefreshIndicator(
+                   onRefresh: () async {
+                     await apiController.fetchNewsData(user.user.value!.district!);
+                   },
+                   child: ListView.builder(
+                    itemCount: chipController.filteredNews.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final calamity = chipController.filteredNews[index];
+                      if(calamity.isApproved=="False") return SizedBox(height: 0,);
+                      if (calamity.news!.contains(chipController.query.value) &&
+                          calamity.type!
+                              .contains(chipController.finalType.join("/"))) {
+                        return Card(
+                          elevation: 8.0,
+                          shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20.0,
-                              vertical: 10.0,
-                            ),
-                            leading: CircleAvatar(
-                              radius: 25,
-                              backgroundImage: AssetImage(
-                                getImageForCalamityType(
-                                    calamity.type!, calamityImage),
-                              ),
-                            ),
-                            title: Text(
-                              calamity.news!,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Text(
-                              calamity.type!,
-                              style: const TextStyle(fontSize: 13),
-                            ),
-                            trailing: Text(
-                              calamity.time!,
-                              // DateFormat('HH:mm').format(DateTime.now()),
-                              style: const TextStyle(
-                                  fontSize:
-                                      12), // You can adjust the font size
-                            ),
-                            onTap: ()=>Get.toNamed(Routes.calamityinfo, arguments: calamity),
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 10.0,
+                            vertical: 6.0,
                           ),
-                        ),
-                      );
-                    } else {
-                      return const SizedBox(
-                        height: 0,
-                      );
-                    }
-                  },
-                );
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20.0,
+                                vertical: 10.0,
+                              ),
+                              leading: CircleAvatar(
+                                radius: 25,
+                                backgroundImage: AssetImage(
+                                  getImageForCalamityType(
+                                      calamity.type!, calamityImage),
+                                ),
+                              ),
+                              title: Text(
+                                calamity.news!,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                calamity.type!,
+                                style: const TextStyle(fontSize: 13),
+                              ),
+                              trailing: Text(
+                                calamity.time!,
+                                // DateFormat('HH:mm').format(DateTime.now()),
+                                style: const TextStyle(
+                                    fontSize:
+                                        12), // You can adjust the font size
+                              ),
+                              onTap: ()=>Get.toNamed(Routes.calamityinfo, arguments: calamity),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return const SizedBox(
+                          height: 0,
+                        );
+                      }
+                    },
+                ),
+                 );
                }
               },
             )),

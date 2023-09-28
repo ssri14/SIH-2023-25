@@ -3,10 +3,10 @@ class Endpoints {
 
   // base url
 
-  static const String baseNewsUrl = "https://jade-mushy-lion.cyclic.cloud";
+  static const String baseNewsUrl = "https://easy-erin-octopus-tux.cyclic.cloud";
   static const String news = "/news";
-  static const String basechaturl = "https://jade-mushy-lion.cyclic.cloud/chat";
-  static const String baseUrl = "https://jade-mushy-lion.cyclic.cloud/user";
+  static const String basechaturl = "https://easy-erin-octopus-tux.cyclic.cloud/chat";
+  static const String baseUrl = "https://easy-erin-octopus-tux.cyclic.cloud/user";
 
 
   // Receive timeout

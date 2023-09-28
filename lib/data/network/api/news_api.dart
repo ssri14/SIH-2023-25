@@ -35,8 +35,8 @@ class NewsApi {
   }
 
   Future<bool> sendNewsApi(
-      String district, String news, String type, String time) async {
-    var data = {"news": news, "type": type, "location": district, "time": time};
+      String district, String news, String type, String time , double lat, double lng) async {
+    var data = {"news": news, "type": type, "location": district, "time": time , "lat":lat ,"lng":lng};
     var response = await dioClient
         .post('${Endpoints.baseNewsUrl}${Endpoints.news}/postNews', data: data);
 

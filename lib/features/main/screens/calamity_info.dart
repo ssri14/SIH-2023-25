@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class CalamityInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     myController.nid.value = calamity.sId!;
     myController.fetchNewsData();
+    final ct = TextEditingController();
 
     const threeSeconds = Duration(seconds: 6);
     Timer.periodic(threeSeconds, (Timer t) => myController.fetchNewsData());
@@ -150,12 +152,13 @@ class CalamityInfo extends StatelessWidget {
                                 hintText: 'Type a message...',
                                 border: InputBorder.none, // Remove border
                               ),
+                              controller: ct,
                               onChanged: (String s) {
                                 myController.chat.value = s;
                               },
                             ),
                           ),
-                          Obx(() => Button())
+                          Button(ct)
                         ],
                       ),
                     ),
@@ -169,22 +172,19 @@ class CalamityInfo extends StatelessWidget {
     );
   }
 
-  Widget Button() {
-    if (myController.chat.isEmpty) {
-      return const SizedBox(
-        height: 0,
-        width: 0,
-      );
-    } else {
+  Widget Button(TextEditingController ct) {
+
       return IconButton(
           onPressed: () {
             myController.username.value = userController.user.value!.username!;
+
             myController.postnewsdata();
+            ct.clear();
 
 
           },
           icon: const Icon(Icons.send));
-    }
+
   }
 
   Widget create() {

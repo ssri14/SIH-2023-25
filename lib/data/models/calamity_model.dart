@@ -3,6 +3,8 @@ class Calamity {
   String? sId;
   String? news;
   String? type;
+  num? lat;
+  num? lng;
   String? location;
   String? time;
 
@@ -11,6 +13,8 @@ class Calamity {
       this.sId,
       this.news,
       this.type,
+      this.lat,
+      this.lng,
       this.location,
       this.time});
 
@@ -21,6 +25,8 @@ class Calamity {
     type = json['type'];
     location = json['location'];
     time = json['time'];
+    lat = json['lat'];
+    lng = json['lng'];
   }
 
   Map<String, dynamic> toJson() {
@@ -31,6 +37,8 @@ class Calamity {
     data['type'] = type;
     data['location'] = location;
     data['time'] = time;
+    data['lat'] = lat;
+    data['lng'] = lng;
     return data;
   }
 }

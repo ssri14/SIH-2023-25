@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:untitled/data/models/User.dart';
+import 'package:untitled/features/main/controller/location_controller.dart';
 import 'package:untitled/features/main/controller/main_controller.dart';
 import 'package:untitled/features/main/screens/about.dart';
 import 'package:untitled/features/main/screens/map_screen.dart';
@@ -26,7 +27,11 @@ class MainScreen extends StatelessWidget {
 
     final UserController user = Get.find();
 
+
     final PageController pageController = PageController(initialPage: 0);
+    final loc = Get.put(LocationController());
+    final api = Get.put(ApiController());
+    api.fetchNewsData(user.user.value!.district!);
 
     return WillPopScope(
         onWillPop: () async {
@@ -163,6 +168,9 @@ class MainScreen extends StatelessWidget {
                                                 selectedType,
                                                 DateFormat('HH:mm')
                                                     .format(DateTime.now()),
+                                                loc.location.value!.latitude!,
+                                                loc.location.value!.longitude!,
+
                                               );
 
                                               // Dismiss the BottomSheet
