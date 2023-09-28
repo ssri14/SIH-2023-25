@@ -4,6 +4,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:untitled/data/models/User.dart';
 import 'package:untitled/features/main/controller/main_controller.dart';
+import 'package:untitled/features/main/screens/about.dart';
 import 'package:untitled/features/main/screens/calamity_info.dart';
 import 'package:untitled/features/main/screens/map_screen.dart';
 import 'package:untitled/features/main/screens/news_screen.dart';
@@ -209,7 +210,7 @@ class MainScreen extends StatelessWidget {
           children: [
             const MapScreen(),
             const NewsScreen(),
-            CalamityInfo(),
+            AboutScreen(),
           ],
         ));
   }
