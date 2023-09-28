@@ -5,6 +5,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:untitled/data/models/User.dart';
 import 'package:untitled/features/main/controller/main_controller.dart';
+import 'package:untitled/features/main/screens/about.dart';
 import 'package:untitled/features/main/screens/calamity_info.dart';
 import 'package:untitled/features/main/screens/map_screen.dart';
 import 'package:untitled/features/main/screens/news_screen.dart';
@@ -201,33 +202,50 @@ class MainScreen extends StatelessWidget {
                         duration: const Duration(milliseconds: 200),
                         curve: Curves.linear);
                   },
-                  tabs: [
-                    GButton(
-                      icon: Icons.home_outlined,
-                      iconSize: main.page.value == 0 ? 25 : 17,
-                    ),
-                    GButton(
-                      icon: Icons.search_outlined,
-                      iconSize: main.page.value == 1 ? 25 : 17,
-                    ),
-                    GButton(
-                      icon: Icons.messenger_outline,
-                      iconSize: main.page.value == 2 ? 25 : 17,
-                    ),
-                  ])),
-          body: PageView(
-            controller: pageController,
-            onPageChanged: (e) {
-              main.page.value = e;
-            },
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              const MapScreen(),
-              const NewsScreen(),
-              CalamityInfo(),
-            ],
-          )),
-    );
+
+                  child: const Text(
+                    "SOS",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w700),
+                  ),
+                ),
+
+              )),
+        ),
+        bottomNavigationBar: Obx(() => GNav(
+                onTabChange: (e) {
+                  pageController.animateToPage(e,
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.linear);
+                },
+                tabs: [
+                  GButton(
+                    icon: Icons.home_outlined,
+                    iconSize: main.page.value == 0 ? 25 : 17,
+                  ),
+                  GButton(
+                    icon: Icons.search_outlined,
+                    iconSize: main.page.value == 1 ? 25 : 17,
+                  ),
+                  GButton(
+                    icon: Icons.messenger_outline,
+                    iconSize: main.page.value == 2 ? 25 : 17,
+                  ),
+                ])),
+        body: PageView(
+          controller: pageController,
+          onPageChanged: (e) {
+            main.page.value = e;
+          },
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            const MapScreen(),
+            const NewsScreen(),
+            AboutScreen(),
+          ],
+        ));
+
+             
   }
 }
 
