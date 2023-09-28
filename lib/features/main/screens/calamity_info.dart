@@ -20,9 +20,10 @@ class CalamityInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    myController.fetchNewsData();
     myController.nid.value = calamity.sId!;
-    const threeSeconds = Duration(seconds: 10);
+    myController.fetchNewsData();
+
+    const threeSeconds = Duration(seconds: 6);
     Timer.periodic(threeSeconds, (Timer t) => myController.fetchNewsData());
     return Scaffold(
       body: SafeArea(

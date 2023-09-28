@@ -23,51 +23,53 @@ class AuthScreen extends StatelessWidget {
         body: SafeArea(
             child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Image.asset('assets/logo.png'),
-              SizedBox(
-                height: Get.width * 0.22,
-              ),
-              // buildTextField(userName, false),
-              FormContainerWidget(
-                prefixIcon: CupertinoIcons.profile_circled,
-                controller: userName,
-                hintText: 'Username',
-              ),
-              SizedBox(
-                height: Get.width * 0.05,
-              ),
-              FormContainerWidget(
-                prefixIcon: Icons.lock,
-                controller: password,
-                hintText: 'Password',
-                isPasswordField: true,
-              ),
-              SizedBox(
-                height: Get.width * 0.08,
-              ),
-              Center(
-                child: MaterialButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
-                  color: Colors.blue,
-                  onPressed: () {
-                    if (userName.value.text.isEmpty ||
-                        password.value.text.isEmpty) {
-                      return;
-                    }
-                    user.loginUser(userName.value.text, password.value.text);
-                  },
-                  child: const Text(
-                    "Log In",
-                    style: TextStyle(color: Colors.white),
-                  ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Image.asset('assets/logo.png'),
+                SizedBox(
+                  height: Get.width * 0.22,
                 ),
-              )
-            ],
+                // buildTextField(userName, false),
+                FormContainerWidget(
+                  prefixIcon: CupertinoIcons.profile_circled,
+                  controller: userName,
+                  hintText: 'Username',
+                ),
+                SizedBox(
+                  height: Get.width * 0.05,
+                ),
+                FormContainerWidget(
+                  prefixIcon: Icons.lock,
+                  controller: password,
+                  hintText: 'Password',
+                  isPasswordField: true,
+                ),
+                SizedBox(
+                  height: Get.width * 0.08,
+                ),
+                Center(
+                  child: MaterialButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                    color: Colors.blue,
+                    onPressed: () {
+                      if (userName.value.text.isEmpty ||
+                          password.value.text.isEmpty) {
+                        return;
+                      }
+                      user.loginUser(userName.value.text, password.value.text);
+                    },
+                    child: const Text(
+                      "Log In",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         )),
       ),

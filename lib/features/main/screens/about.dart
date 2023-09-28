@@ -16,7 +16,7 @@ final UserController userController = Get.find();
           children: <Widget>[
             CircleAvatar(
               radius: 50.0,
-              backgroundImage: AssetImage('assets/profile_image.png'), // Replace with your image asset
+              backgroundImage: AssetImage('assets/person.png'), // Replace with your image asset
             ),
             SizedBox(height: 20.0),
             Text(
